@@ -1,0 +1,26 @@
+name: CombatCore
+version: 1.0.0
+main: com.combatcore.CombatCorePlugin
+api-version: "1.20"
+author: CombatCore
+softdepend: [PlaceholderAPI, WorldGuard]
+depend: []
+commands:
+  combatcore:
+    description: CombatCore admin command
+    usage: /combatcore <reload|debug|toggle|bounty|stats>
+    permission: combatcore.admin
+permissions:
+  combatcore.admin:
+    default: op
+  combatcore.debug:
+    default: op
+  combatcore.commandblock.bypass:
+    default: op
+  combatcore.punishment.override:
+    default: op
+  combatcore.safezone.bypass:
+    default: op
+  combatcore.stats.view:
+    default: op
+

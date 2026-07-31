@@ -1,0 +1,216 @@
+# ==============================================================================
+#                      CombatCore Advanced Configuration
+# ==============================================================================
+# Use this configuration file to customize combat tagging, punishments, safezones,
+# display HUDs, databases, and webhook logging settings.
+
+# ------------------------------------------------------------------------------
+# Combat Settings
+# ------------------------------------------------------------------------------
+combat:
+  # The duration of the combat tag in seconds.
+  tag-duration: 20
+  
+  # Whether combat tag should reset/extend when a player hits or gets hit during combat.
+  extend-on-hit: true
+
+  # Locked combat mode: when enabled, only the two players in an active combat pair
+  # can damage each other. Any third-party player attempting to hit either of them
+  # will have their damage cancelled until the combat tag expires.
+  # enable for strict 1v1 combat enforcement no one else should be able to hit you or the player you are in combat with.
+  locked-combat: false
+  
+  # Specify which types of damage or combat actions will trigger a combat tag.
+  causes:
+    # Physical/Melee attacks (swords, axes, fists, etc.)
+    melee: true
+    # Ranged attacks (bows, crossbows)
+    bow: true
+    # TNT and explosive blocks
+    tnt: true
+    # End Crystal explosions
+    crystal: true
+    # Respawn Anchor explosions
+    anchor: true
+    # Thrown trident attacks
+    trident: true
+
+# ------------------------------------------------------------------------------
+# Punishment Settings (For combat logging / logging out while tagged)
+# ------------------------------------------------------------------------------
+punishments:
+  # Enable or disable punishments when players log out during combat.
+  enabled: true
+  
+  # Instantly kill the logging player, dropping their items at the logout location.
+  death: true
+  
+  # Strike a decorative or warning lightning bolt at the player's logout coordinates.
+  lightning: false
+  
+  # Completely clear the player's inventory upon combat logging.
+  inventory-wipe: false
+  
+  # Amount of money to deduct from the player's Vault economy balance.
+  economy-deduction: 0.0
+  
+  # Ban the player temporarily for this duration (in seconds). Use 0 to disable.
+  temporary-ban-seconds: 0
+  
+  # Permanently ban the player from the server.
+  permanent-ban: false
+  
+  # Mute the player temporarily for this duration (in seconds) on their next join.
+  temporary-mute-seconds: 0
+  
+  # Permanently mute the player on the server.
+  permanent-mute: false
+  
+  # Freeze the player's movement temporarily upon their next login.
+  freeze: false
+  
+  # The name of the jail to send the player to (e.g. Essentials jail). Leave empty "" to disable.
+  jail-location: ""
+  
+  # Commands to run from console when the player combat-logs.
+  # Use {player} for the player's name. Set to "" to disable.
+  command-execution:
+    - ""
+    
+  # Potion effects to apply to the player upon their next login.
+  # Format: "EFFECT:duration_seconds:amplifier" (e.g., "SLOW:10:2" is Slowness II for 10 seconds).
+  potion-effects:
+    - "SLOW:10:2"
+    
+  # Reduce the player's permanent or temporary stats (e.g. RPG stats or health).
+  stat-reduction: false
+  
+  # Progressive punishments: Scale punishments up for repeat offenders.
+  progressive:
+    # Enable progressive multipliers for repeated combat logging.
+    enabled: true
+    # Multiplier applied to fines/ban durations for each subsequent offense.
+    multiplier: 1.25
+    # The number of combat logs before progressive penalties begin to apply.
+    repeat-offender-threshold: 3
+
+# ------------------------------------------------------------------------------
+# Command Restrictions
+# ------------------------------------------------------------------------------
+# Block or allow specific commands while a player is in combat to prevent escapes.
+command-restrictions:
+  # Enable command blocking during combat.
+  enabled: true
+  
+  # List of exact commands that players CANNOT use while in combat.
+  blacklist:
+    - spawn
+    - home
+    - warp
+    - tpa
+    - hub
+    - tpahere
+    - kits
+    - kit
+    
+  # List of exact commands that players ARE allowed to use (overrides the blacklist).
+  whitelist:
+    - msg
+    - tell
+    - whisper
+    
+  # Regular expression patterns for advanced command blocking (e.g., matching sub-arguments).
+  regex-blacklist:
+    - "^/spawn.*"
+    - "^/home.*"
+    - "^/warp.*"
+    - "^/tpa.*"
+    - "^/hub.*"
+    
+  # Hide or block tab-completion of blacklisted commands when tagged in combat.
+  block-tab-complete: true
+
+# ------------------------------------------------------------------------------
+# Display & HUD Options
+# ------------------------------------------------------------------------------
+display:
+  # Action Bar HUD settings
+  action-bar:
+    # Enable displaying the combat timer on the player's action bar.
+    enabled: true
+    # Text template. Supports legacy colors (&c) and the {time} placeholder.
+    template: "&cCombat Tagged: &f{time}s"
+    # How often the action bar updates in ticks (20 ticks = 1 second).
+    update-interval: 10
+    
+  # Boss Bar HUD settings
+  boss-bar:
+    # Enable displaying a Boss Bar timer at the top of the screen.
+    enabled: true
+    # Text template. Supports legacy colors (&c) and the {time} placeholder.
+    template: "&cCombat Tag &8- &f{time}s"
+
+# ------------------------------------------------------------------------------
+# Safezone Settings
+# ------------------------------------------------------------------------------
+# Define behavior when a combat-tagged player tries to enter a safezone.
+safezone:
+  # Integration mode:
+  # - off: Ignore safezones entirely.
+  # - deny: Block combat-tagged players from entering safezones where pvp is disabled.
+  # - extend: Allow entry, but extend their combat tag to keep them vulnerable.
+  integration-mode: deny
+  
+  # Whether to extend the combat tag duration while the player is inside a safezone.
+  extend-tag: true
+  
+  # Number of seconds to add to the tag when extending inside a safezone.
+  extend-seconds: 6
+
+# ------------------------------------------------------------------------------
+# Custom Messages & Localization
+# ------------------------------------------------------------------------------
+# Supports legacy color codes (e.g., &c, &a) and placeholders like {time}, {attacker}, {victim}.
+messages:
+  tagged: "&cYou are now in combat for &f{time}s&c."
+  combat-ended: "&aYour combat tag has expired."
+  combat-logout: "&cCombat logging detected! Punishments applied."
+  blocked-command: "&cYou cannot use that command while in combat."
+  kill-credit: "&6{attacker} defeated {victim} while combat tagged."
+  safezone-deny: "&cYou cannot enter a safe zone while combat tagged."
+  safezone-extended: "&eYour combat tag has been extended while in a safe zone."
+
+# ------------------------------------------------------------------------------
+# Database & Storage Configuration
+# ------------------------------------------------------------------------------
+# Configure where player data, stats, and logs are stored.
+database:
+  # Type of storage. Options: sqlite | mysql | mongodb | local
+  type: sqlite
+  
+  # SQLite configuration (local file-based database)
+  sqlite:
+    file: combatcore.db
+    
+  # MySQL configuration (remote relational database)
+  mysql:
+    host: localhost
+    port: 3306
+    database: combatcore
+    username: root
+    password: ""
+    
+  # MongoDB configuration (NoSQL document database)
+  mongodb:
+    uri: "" # Example: mongodb+srv://user:pass@cluster0.mongodb.net/combatcore
+    
+  # Local file fallback settings
+  local:
+    enabled: true
+
+# ------------------------------------------------------------------------------
+# Discord Integrations
+# ------------------------------------------------------------------------------
+discord-webhook:
+  # Webhook URL to post combat log notifications to Discord. Leave empty "" to disable.
+  url: ""
